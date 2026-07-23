@@ -7,37 +7,34 @@ import { SafeAreaView } from 'react-native-safe-area-context'
 import { Ionicons } from '@expo/vector-icons'
 import { colors, font, radius } from '../theme'
 import Logo from '../components/Logo'
+import LanguagePicker from '../components/LanguagePicker'
+import { useLang } from '../context/LanguageContext'
 
 const PRESET_AMOUNTS = [10, 25, 50, 100, 250, 500]
-
-const IMPACT = [
-  { amount: 10,  desc: 'Provides a week of groceries for one person' },
-  { amount: 25,  desc: 'Covers a family\'s emergency food for a week' },
-  { amount: 50,  desc: 'Helps with one month of utility assistance' },
-  { amount: 100, desc: 'Contributes toward one month of rent support' },
-  { amount: 250, desc: 'Funds a full month of meals for a family of four' },
-  { amount: 500, desc: 'Provides comprehensive support for one family in need' },
-]
-
 type Frequency = 'one-time' | 'monthly'
 
 export default function DonateScreen() {
+  const { t, isRTL } = useLang()
   const [selected, setSelected]   = useState<number>(25)
   const [custom, setCustom]       = useState('')
   const [frequency, setFrequency] = useState<Frequency>('one-time')
   const [loading, setLoading]     = useState(false)
 
   const amount = custom ? parseFloat(custom) || 0 : selected
-  const impact = IMPACT.find(i => i.amount === selected)
+
+  const IMPACT: Record<number, string> = {
+    10: t.impact_10, 25: t.impact_25, 50: t.impact_50,
+    100: t.impact_100, 250: t.impact_250, 500: t.impact_500,
+  }
+  const impact = IMPACT[selected]
 
   async function handleDonate() {
     if (amount <= 0) {
-      Alert.alert('Invalid Amount', 'Please enter a valid donation amount.')
+      Alert.alert(t.invalidAmount, t.invalidAmountMsg)
       return
     }
     setLoading(true)
     try {
-      // Opens Sabil's donation page — replace with Stripe/payment processor deeplink
       await Linking.openURL('https://www.sabil.us/donate-today/')
     } catch {
       Alert.alert('Error', 'Could not open donation page. Please visit sabil.us to donate.')
@@ -51,13 +48,15 @@ export default function DonateScreen() {
       <ScrollView showsVerticalScrollIndicator={false} contentContainerStyle={styles.scroll}>
 
         {/* Header */}
-        <View style={styles.header}>
+        <View style={[styles.header, isRTL && styles.rowReverse]}>
           <Logo width={140} height={52} />
+          <LanguagePicker />
+        </View>
+
+        <View style={styles.titleBlock}>
           <Ionicons name="heart" size={32} color={colors.primary} />
-          <Text style={styles.title}>Make a Difference</Text>
-          <Text style={styles.subtitle}>
-            Your donation helps Sabil USA provide food, housing, and health support to families in need.
-          </Text>
+          <Text style={[styles.title, isRTL && styles.textRight]}>{t.makeADifference}</Text>
+          <Text style={[styles.subtitle, isRTL && styles.textRight]}>{t.donateSubtitle}</Text>
         </View>
 
         {/* Frequency Toggle */}
@@ -69,14 +68,14 @@ export default function DonateScreen() {
               onPress={() => setFrequency(f)}
             >
               <Text style={[styles.freqText, frequency === f && styles.freqTextActive]}>
-                {f === 'one-time' ? 'One-Time' : 'Monthly'}
+                {f === 'one-time' ? t.oneTime : t.monthly}
               </Text>
             </TouchableOpacity>
           ))}
         </View>
 
         {/* Preset Amounts */}
-        <Text style={styles.label}>Select an Amount</Text>
+        <Text style={[styles.label, isRTL && styles.textRight]}>{t.selectAmount}</Text>
         <View style={styles.amountsGrid}>
           {PRESET_AMOUNTS.map(a => (
             <TouchableOpacity
@@ -92,13 +91,13 @@ export default function DonateScreen() {
         </View>
 
         {/* Custom Amount */}
-        <Text style={styles.label}>Or Enter Custom Amount</Text>
-        <View style={styles.customRow}>
+        <Text style={[styles.label, isRTL && styles.textRight]}>{t.customAmount}</Text>
+        <View style={[styles.customRow, isRTL && styles.rowReverse]}>
           <Text style={styles.dollarSign}>$</Text>
           <TextInput
-            style={styles.customInput}
+            style={[styles.customInput, isRTL && styles.textRight]}
             value={custom}
-            onChangeText={t => { setCustom(t.replace(/[^0-9.]/g, '')); setSelected(0) }}
+            onChangeText={v => { setCustom(v.replace(/[^0-9.]/g, '')); setSelected(0) }}
             placeholder="0.00"
             placeholderTextColor={colors.textMuted}
             keyboardType="decimal-pad"
@@ -107,24 +106,24 @@ export default function DonateScreen() {
 
         {/* Impact Message */}
         {impact && !custom && (
-          <View style={styles.impactCard}>
+          <View style={[styles.impactCard, isRTL && styles.rowReverse]}>
             <Ionicons name="sparkles" size={16} color={colors.primary} />
-            <Text style={styles.impactText}>{impact.desc}</Text>
+            <Text style={[styles.impactText, isRTL && styles.textRight]}>{impact}</Text>
           </View>
         )}
 
         {/* Summary */}
         <View style={styles.summaryCard}>
-          <View style={styles.summaryRow}>
-            <Text style={styles.summaryLabel}>Amount</Text>
+          <View style={[styles.summaryRow, isRTL && styles.rowReverse]}>
+            <Text style={styles.summaryLabel}>{t.amountLabel}</Text>
             <Text style={styles.summaryValue}>${amount > 0 ? amount.toFixed(2) : '0.00'}</Text>
           </View>
-          <View style={styles.summaryRow}>
-            <Text style={styles.summaryLabel}>Frequency</Text>
-            <Text style={styles.summaryValue}>{frequency === 'one-time' ? 'One-Time' : 'Monthly'}</Text>
+          <View style={[styles.summaryRow, isRTL && styles.rowReverse]}>
+            <Text style={styles.summaryLabel}>{t.frequencyLabel}</Text>
+            <Text style={styles.summaryValue}>{frequency === 'one-time' ? t.oneTime : t.monthly}</Text>
           </View>
-          <View style={[styles.summaryRow, { borderBottomWidth: 0 }]}>
-            <Text style={styles.summaryLabel}>Tax Deductible</Text>
+          <View style={[styles.summaryRow, { borderBottomWidth: 0 }, isRTL && styles.rowReverse]}>
+            <Text style={styles.summaryLabel}>{t.taxDeductible}</Text>
             <View style={styles.badge}>
               <Text style={styles.badgeText}>501(c)(3)</Text>
             </View>
@@ -139,7 +138,9 @@ export default function DonateScreen() {
         >
           <Ionicons name="heart" size={20} color={colors.text} />
           <Text style={styles.donateBtnText}>
-            {loading ? 'Opening...' : `Donate $${amount > 0 ? amount.toFixed(2) : '0.00'}${frequency === 'monthly' ? '/mo' : ''}`}
+            {loading
+              ? t.opening
+              : `${t.donate} $${amount > 0 ? amount.toFixed(2) : '0.00'}${frequency === 'monthly' ? '/mo' : ''}`}
           </Text>
         </TouchableOpacity>
 
@@ -147,15 +148,15 @@ export default function DonateScreen() {
         <View style={styles.trustRow}>
           <View style={styles.trustItem}>
             <Ionicons name="shield-checkmark" size={16} color={colors.green} />
-            <Text style={styles.trustText}>Secure Payment</Text>
+            <Text style={styles.trustText}>{t.securePayment}</Text>
           </View>
           <View style={styles.trustItem}>
             <Ionicons name="document-text" size={16} color={colors.green} />
-            <Text style={styles.trustText}>Tax Deductible</Text>
+            <Text style={styles.trustText}>{t.taxDeductible}</Text>
           </View>
           <View style={styles.trustItem}>
             <Ionicons name="people" size={16} color={colors.green} />
-            <Text style={styles.trustText}>100% to Programs</Text>
+            <Text style={styles.trustText}>{t.toPrograms}</Text>
           </View>
         </View>
 
@@ -168,7 +169,10 @@ export default function DonateScreen() {
 const styles = StyleSheet.create({
   safe:        { flex: 1, backgroundColor: colors.offWhite },
   scroll:      { padding: 20 },
-  header:      { alignItems: 'center', marginBottom: 28, gap: 8 },
+  header:      { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginBottom: 20 },
+  rowReverse:  { flexDirection: 'row-reverse' },
+  textRight:   { textAlign: 'right' },
+  titleBlock:  { alignItems: 'center', marginBottom: 28, gap: 8 },
   title:       { fontSize: font.xxl, fontWeight: '800', color: colors.text },
   subtitle:    { fontSize: font.base, color: colors.textMuted, textAlign: 'center', lineHeight: 22 },
   label:       { fontSize: font.sm, fontWeight: '600', color: colors.textMuted, marginBottom: 10, textTransform: 'uppercase', letterSpacing: 0.5 },
@@ -189,8 +193,7 @@ const styles = StyleSheet.create({
   customRow: {
     flexDirection: 'row', alignItems: 'center',
     backgroundColor: colors.white, borderRadius: radius.md,
-    borderWidth: 2, borderColor: colors.border, paddingHorizontal: 16,
-    marginBottom: 20,
+    borderWidth: 2, borderColor: colors.border, paddingHorizontal: 16, marginBottom: 20,
   },
   dollarSign:  { fontSize: font.lg, fontWeight: '700', color: colors.textMuted, marginRight: 6 },
   customInput: { flex: 1, fontSize: font.lg, fontWeight: '700', color: colors.text, paddingVertical: 14 },

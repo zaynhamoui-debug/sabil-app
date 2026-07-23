@@ -7,50 +7,50 @@ import { SafeAreaView } from 'react-native-safe-area-context'
 import { Ionicons } from '@expo/vector-icons'
 import { colors, font, radius } from '../theme'
 import Logo from '../components/Logo'
-
-const DAYS = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']
-const INTERESTS = [
-  { id: 'food',    label: 'Food Distribution',    icon: 'basket-outline' as const },
-  { id: 'admin',   label: 'Admin & Office',        icon: 'document-text-outline' as const },
-  { id: 'events',  label: 'Events & Outreach',     icon: 'megaphone-outline' as const },
-  { id: 'health',  label: 'Health Programs',       icon: 'heart-outline' as const },
-  { id: 'youth',   label: 'Youth Programs',        icon: 'people-outline' as const },
-  { id: 'driving', label: 'Driving & Delivery',    icon: 'car-outline' as const },
-]
+import LanguagePicker from '../components/LanguagePicker'
+import { useLang } from '../context/LanguageContext'
 
 interface Form {
-  firstName: string
-  lastName:  string
-  email:     string
-  phone:     string
-  message:   string
+  firstName: string; lastName: string; email: string; phone: string; message: string
 }
 
 export default function VolunteerScreen() {
-  const [form, setForm]         = useState<Form>({ firstName: '', lastName: '', email: '', phone: '', message: '' })
-  const [days, setDays]         = useState<string[]>([])
+  const { t, isRTL } = useLang()
+  const [form, setForm]           = useState<Form>({ firstName: '', lastName: '', email: '', phone: '', message: '' })
+  const [days, setDays]           = useState<number[]>([])
   const [interests, setInterests] = useState<string[]>([])
   const [submitted, setSubmitted] = useState(false)
-  const [loading, setLoading]   = useState(false)
+  const [loading, setLoading]     = useState(false)
 
-  function toggleDay(d: string) {
-    setDays(prev => prev.includes(d) ? prev.filter(x => x !== d) : [...prev, d])
+  const INTERESTS = [
+    { id: 'food',    label: t.interest_food,    icon: 'basket-outline' as const },
+    { id: 'admin',   label: t.interest_admin,   icon: 'document-text-outline' as const },
+    { id: 'events',  label: t.interest_events,  icon: 'megaphone-outline' as const },
+    { id: 'health',  label: t.interest_health,  icon: 'heart-outline' as const },
+    { id: 'youth',   label: t.interest_youth,   icon: 'people-outline' as const },
+    { id: 'driving', label: t.interest_driving, icon: 'car-outline' as const },
+  ]
+
+  function toggleDay(i: number) {
+    setDays(prev => prev.includes(i) ? prev.filter(x => x !== i) : [...prev, i])
   }
   function toggleInterest(id: string) {
     setInterests(prev => prev.includes(id) ? prev.filter(x => x !== id) : [...prev, id])
   }
+  function reset() {
+    setSubmitted(false)
+    setForm({ firstName: '', lastName: '', email: '', phone: '', message: '' })
+    setDays([]); setInterests([])
+  }
 
   async function handleSubmit() {
     if (!form.firstName || !form.lastName || !form.email) {
-      Alert.alert('Missing Info', 'Please fill in your name and email to continue.')
-      return
+      Alert.alert(t.missingInfo, t.missingInfoMsg); return
     }
     if (!/\S+@\S+\.\S+/.test(form.email)) {
-      Alert.alert('Invalid Email', 'Please enter a valid email address.')
-      return
+      Alert.alert(t.invalidEmail, t.invalidEmailMsg); return
     }
     setLoading(true)
-    // Simulate network request — replace with actual API call (Supabase, email service, etc.)
     await new Promise(r => setTimeout(r, 1200))
     setLoading(false)
     setSubmitted(true)
@@ -63,12 +63,12 @@ export default function VolunteerScreen() {
           <View style={styles.successIcon}>
             <Ionicons name="checkmark" size={48} color={colors.white} />
           </View>
-          <Text style={styles.successTitle}>Thank You!</Text>
-          <Text style={styles.successText}>
-            We've received your volunteer application, {form.firstName}. Our team will reach out within 2-3 business days to get you started.
+          <Text style={styles.successTitle}>{t.thankYou}</Text>
+          <Text style={[styles.successText, isRTL && styles.textRight]}>
+            {t.volunteerSuccessText}
           </Text>
-          <TouchableOpacity style={styles.successBtn} onPress={() => { setSubmitted(false); setForm({ firstName: '', lastName: '', email: '', phone: '', message: '' }); setDays([]); setInterests([]) }}>
-            <Text style={styles.successBtnText}>Submit Another</Text>
+          <TouchableOpacity style={styles.successBtn} onPress={reset}>
+            <Text style={styles.successBtnText}>{t.submitAnother}</Text>
           </TouchableOpacity>
         </View>
       </SafeAreaView>
@@ -81,50 +81,48 @@ export default function VolunteerScreen() {
         <ScrollView showsVerticalScrollIndicator={false} contentContainerStyle={styles.scroll}>
 
           {/* Header */}
-          <View style={styles.header}>
+          <View style={[styles.topHeader, isRTL && styles.rowReverse]}>
             <Logo width={140} height={52} />
+            <LanguagePicker />
+          </View>
+
+          <View style={styles.header}>
             <View style={[styles.headerIcon, { backgroundColor: colors.green }]}>
               <Ionicons name="people" size={28} color={colors.white} />
             </View>
-            <Text style={styles.title}>Volunteer With Us</Text>
-            <Text style={styles.subtitle}>
-              Join our community of dedicated volunteers making a real difference in families' lives.
-            </Text>
+            <Text style={[styles.title, isRTL && styles.textRight]}>{t.volunteerWithUs}</Text>
+            <Text style={[styles.subtitle, isRTL && styles.textRight]}>{t.volunteerSubtitle}</Text>
           </View>
 
           {/* Why Volunteer */}
           <View style={styles.whyCard}>
-            {[
-              'Make a direct impact in your community',
-              'Build meaningful connections',
-              'Gain skills and experience',
-            ].map(t => (
-              <View key={t} style={styles.whyRow}>
+            {[t.directImpact, t.meaningfulConnections, t.gainSkills].map(text => (
+              <View key={text} style={[styles.whyRow, isRTL && styles.rowReverse]}>
                 <Ionicons name="checkmark-circle" size={18} color={colors.green} />
-                <Text style={styles.whyText}>{t}</Text>
+                <Text style={[styles.whyText, isRTL && styles.textRight]}>{text}</Text>
               </View>
             ))}
           </View>
 
           {/* Personal Info */}
-          <Text style={styles.sectionLabel}>Your Information</Text>
-          <View style={styles.row}>
+          <Text style={[styles.sectionLabel, isRTL && styles.textRight]}>{t.yourInformation}</Text>
+          <View style={[styles.row, isRTL && styles.rowReverse]}>
             <View style={[styles.inputWrap, { flex: 1 }]}>
-              <Text style={styles.fieldLabel}>First Name *</Text>
+              <Text style={[styles.fieldLabel, isRTL && styles.textRight]}>{t.firstName} *</Text>
               <TextInput
-                style={styles.input}
+                style={[styles.input, isRTL && styles.textRight]}
                 value={form.firstName}
-                onChangeText={t => setForm(f => ({ ...f, firstName: t }))}
+                onChangeText={v => setForm(f => ({ ...f, firstName: v }))}
                 placeholder="Jane"
                 placeholderTextColor={colors.textMuted}
               />
             </View>
             <View style={[styles.inputWrap, { flex: 1 }]}>
-              <Text style={styles.fieldLabel}>Last Name *</Text>
+              <Text style={[styles.fieldLabel, isRTL && styles.textRight]}>{t.lastName} *</Text>
               <TextInput
-                style={styles.input}
+                style={[styles.input, isRTL && styles.textRight]}
                 value={form.lastName}
-                onChangeText={t => setForm(f => ({ ...f, lastName: t }))}
+                onChangeText={v => setForm(f => ({ ...f, lastName: v }))}
                 placeholder="Smith"
                 placeholderTextColor={colors.textMuted}
               />
@@ -132,11 +130,11 @@ export default function VolunteerScreen() {
           </View>
 
           <View style={styles.inputWrap}>
-            <Text style={styles.fieldLabel}>Email Address *</Text>
+            <Text style={[styles.fieldLabel, isRTL && styles.textRight]}>{t.emailAddress} *</Text>
             <TextInput
-              style={styles.input}
+              style={[styles.input, isRTL && styles.textRight]}
               value={form.email}
-              onChangeText={t => setForm(f => ({ ...f, email: t }))}
+              onChangeText={v => setForm(f => ({ ...f, email: v }))}
               placeholder="jane@email.com"
               placeholderTextColor={colors.textMuted}
               keyboardType="email-address"
@@ -145,11 +143,11 @@ export default function VolunteerScreen() {
           </View>
 
           <View style={styles.inputWrap}>
-            <Text style={styles.fieldLabel}>Phone Number</Text>
+            <Text style={[styles.fieldLabel, isRTL && styles.textRight]}>{t.phoneNumber}</Text>
             <TextInput
-              style={styles.input}
+              style={[styles.input, isRTL && styles.textRight]}
               value={form.phone}
-              onChangeText={t => setForm(f => ({ ...f, phone: t }))}
+              onChangeText={v => setForm(f => ({ ...f, phone: v }))}
               placeholder="(555) 000-0000"
               placeholderTextColor={colors.textMuted}
               keyboardType="phone-pad"
@@ -157,35 +155,31 @@ export default function VolunteerScreen() {
           </View>
 
           {/* Availability */}
-          <Text style={styles.sectionLabel}>Availability</Text>
+          <Text style={[styles.sectionLabel, isRTL && styles.textRight]}>{t.availability}</Text>
           <View style={styles.daysRow}>
-            {DAYS.map(d => (
+            {t.days.map((d, i) => (
               <TouchableOpacity
-                key={d}
-                style={[styles.dayBtn, days.includes(d) && styles.dayBtnActive]}
-                onPress={() => toggleDay(d)}
+                key={i}
+                style={[styles.dayBtn, days.includes(i) && styles.dayBtnActive]}
+                onPress={() => toggleDay(i)}
               >
-                <Text style={[styles.dayText, days.includes(d) && styles.dayTextActive]}>{d}</Text>
+                <Text style={[styles.dayText, days.includes(i) && styles.dayTextActive]}>{d}</Text>
               </TouchableOpacity>
             ))}
           </View>
 
           {/* Areas of Interest */}
-          <Text style={styles.sectionLabel}>Areas of Interest</Text>
+          <Text style={[styles.sectionLabel, isRTL && styles.textRight]}>{t.areasOfInterest}</Text>
           <View style={styles.interestsGrid}>
-            {INTERESTS.map(i => (
+            {INTERESTS.map(item => (
               <TouchableOpacity
-                key={i.id}
-                style={[styles.interestBtn, interests.includes(i.id) && styles.interestBtnActive]}
-                onPress={() => toggleInterest(i.id)}
+                key={item.id}
+                style={[styles.interestBtn, interests.includes(item.id) && styles.interestBtnActive, isRTL && styles.rowReverse]}
+                onPress={() => toggleInterest(item.id)}
               >
-                <Ionicons
-                  name={i.icon}
-                  size={20}
-                  color={interests.includes(i.id) ? colors.white : colors.gray}
-                />
-                <Text style={[styles.interestText, interests.includes(i.id) && styles.interestTextActive]}>
-                  {i.label}
+                <Ionicons name={item.icon} size={20} color={interests.includes(item.id) ? colors.white : colors.gray} />
+                <Text style={[styles.interestText, interests.includes(item.id) && styles.interestTextActive]}>
+                  {item.label}
                 </Text>
               </TouchableOpacity>
             ))}
@@ -193,12 +187,12 @@ export default function VolunteerScreen() {
 
           {/* Message */}
           <View style={styles.inputWrap}>
-            <Text style={styles.fieldLabel}>Anything Else You'd Like Us to Know?</Text>
+            <Text style={[styles.fieldLabel, isRTL && styles.textRight]}>{t.anythingElse}</Text>
             <TextInput
-              style={[styles.input, styles.textarea]}
+              style={[styles.input, styles.textarea, isRTL && styles.textRight]}
               value={form.message}
-              onChangeText={t => setForm(f => ({ ...f, message: t }))}
-              placeholder="Skills, experience, questions..."
+              onChangeText={v => setForm(f => ({ ...f, message: v }))}
+              placeholder={t.anythingPlaceholder}
               placeholderTextColor={colors.textMuted}
               multiline
               numberOfLines={4}
@@ -213,7 +207,7 @@ export default function VolunteerScreen() {
             disabled={loading}
           >
             <Ionicons name={loading ? 'hourglass-outline' : 'send'} size={18} color={colors.white} />
-            <Text style={styles.submitBtnText}>{loading ? 'Submitting...' : 'Submit Application'}</Text>
+            <Text style={styles.submitBtnText}>{loading ? t.submitting : t.submitApplication}</Text>
           </TouchableOpacity>
 
           <View style={{ height: 32 }} />
@@ -224,42 +218,42 @@ export default function VolunteerScreen() {
 }
 
 const styles = StyleSheet.create({
-  safe:             { flex: 1, backgroundColor: colors.offWhite },
-  scroll:           { padding: 20 },
-  header:           { alignItems: 'center', marginBottom: 24, gap: 10 },
-  headerIcon:       { width: 64, height: 64, borderRadius: radius.xl, alignItems: 'center', justifyContent: 'center' },
-  title:            { fontSize: font.xxl, fontWeight: '800', color: colors.text },
-  subtitle:         { fontSize: font.base, color: colors.textMuted, textAlign: 'center', lineHeight: 22 },
-  whyCard: {
-    backgroundColor: colors.green + '10', borderRadius: radius.lg,
-    padding: 16, marginBottom: 24, gap: 10,
-  },
-  whyRow:           { flexDirection: 'row', alignItems: 'center', gap: 8 },
-  whyText:          { fontSize: font.base, color: colors.green, fontWeight: '500' },
-  sectionLabel:     { fontSize: font.sm, fontWeight: '700', color: colors.textMuted, textTransform: 'uppercase', letterSpacing: 0.5, marginBottom: 12 },
-  row:              { flexDirection: 'row', gap: 10 },
-  inputWrap:        { marginBottom: 16 },
-  fieldLabel:       { fontSize: font.sm, fontWeight: '600', color: colors.text, marginBottom: 6 },
+  safe:         { flex: 1, backgroundColor: colors.offWhite },
+  scroll:       { padding: 20 },
+  topHeader:    { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginBottom: 16 },
+  rowReverse:   { flexDirection: 'row-reverse' },
+  textRight:    { textAlign: 'right' },
+  header:       { alignItems: 'center', marginBottom: 24, gap: 10 },
+  headerIcon:   { width: 64, height: 64, borderRadius: radius.xl, alignItems: 'center', justifyContent: 'center' },
+  title:        { fontSize: font.xxl, fontWeight: '800', color: colors.text },
+  subtitle:     { fontSize: font.base, color: colors.textMuted, textAlign: 'center', lineHeight: 22 },
+  whyCard:      { backgroundColor: colors.green + '10', borderRadius: radius.lg, padding: 16, marginBottom: 24, gap: 10 },
+  whyRow:       { flexDirection: 'row', alignItems: 'center', gap: 8 },
+  whyText:      { fontSize: font.base, color: colors.green, fontWeight: '500', flex: 1 },
+  sectionLabel: { fontSize: font.sm, fontWeight: '700', color: colors.textMuted, textTransform: 'uppercase', letterSpacing: 0.5, marginBottom: 12 },
+  row:          { flexDirection: 'row', gap: 10 },
+  inputWrap:    { marginBottom: 16 },
+  fieldLabel:   { fontSize: font.sm, fontWeight: '600', color: colors.text, marginBottom: 6 },
   input: {
     backgroundColor: colors.white, borderRadius: radius.md,
     borderWidth: 1.5, borderColor: colors.border,
     paddingHorizontal: 14, paddingVertical: 13,
     fontSize: font.base, color: colors.text,
   },
-  textarea:         { minHeight: 100, paddingTop: 13 },
-  daysRow:          { flexDirection: 'row', flexWrap: 'wrap', gap: 8, marginBottom: 24 },
-  dayBtn:           { paddingHorizontal: 14, paddingVertical: 10, borderRadius: radius.full, backgroundColor: colors.white, borderWidth: 1.5, borderColor: colors.border },
-  dayBtnActive:     { backgroundColor: colors.green, borderColor: colors.green },
-  dayText:          { fontSize: font.sm, fontWeight: '600', color: colors.gray },
-  dayTextActive:    { color: colors.white },
-  interestsGrid:    { flexDirection: 'row', flexWrap: 'wrap', gap: 10, marginBottom: 24 },
+  textarea:     { minHeight: 100, paddingTop: 13 },
+  daysRow:      { flexDirection: 'row', flexWrap: 'wrap', gap: 8, marginBottom: 24 },
+  dayBtn:       { paddingHorizontal: 14, paddingVertical: 10, borderRadius: radius.full, backgroundColor: colors.white, borderWidth: 1.5, borderColor: colors.border },
+  dayBtnActive: { backgroundColor: colors.green, borderColor: colors.green },
+  dayText:      { fontSize: font.sm, fontWeight: '600', color: colors.gray },
+  dayTextActive: { color: colors.white },
+  interestsGrid: { flexDirection: 'row', flexWrap: 'wrap', gap: 10, marginBottom: 24 },
   interestBtn: {
     flexDirection: 'row', alignItems: 'center', gap: 6,
     paddingHorizontal: 14, paddingVertical: 10, borderRadius: radius.md,
     backgroundColor: colors.white, borderWidth: 1.5, borderColor: colors.border,
   },
   interestBtnActive: { backgroundColor: colors.green, borderColor: colors.green },
-  interestText:     { fontSize: font.sm, fontWeight: '600', color: colors.gray },
+  interestText:      { fontSize: font.sm, fontWeight: '600', color: colors.gray },
   interestTextActive: { color: colors.white },
   submitBtn: {
     backgroundColor: colors.green, borderRadius: radius.lg,
