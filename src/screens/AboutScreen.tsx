@@ -6,6 +6,7 @@ import {
 import { SafeAreaView } from 'react-native-safe-area-context'
 import { Ionicons } from '@expo/vector-icons'
 import { colors, font, radius } from '../theme'
+import Logo from '../components/Logo'
 
 const VALUES = [
   { icon: 'heart-outline' as const,         title: 'Dignity',      desc: 'Every person deserves to be treated with respect and compassion.' },
@@ -29,11 +30,8 @@ export default function AboutScreen() {
 
         {/* Logo Block */}
         <View style={styles.logoBlock}>
-          <View style={styles.logoCircle}>
-            <Text style={styles.logoLetter}>S</Text>
-          </View>
-          <Text style={styles.orgName}>SABIL USA</Text>
-          <Text style={styles.orgTagline}>Health & Human Services</Text>
+          <Logo width={200} height={76} style={{ marginBottom: 4 }} />
+          <Text style={styles.orgTagline}>Health & Human Services Nonprofit</Text>
         </View>
 
         {/* Mission */}

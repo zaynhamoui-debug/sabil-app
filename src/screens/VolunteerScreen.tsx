@@ -6,6 +6,7 @@ import {
 import { SafeAreaView } from 'react-native-safe-area-context'
 import { Ionicons } from '@expo/vector-icons'
 import { colors, font, radius } from '../theme'
+import Logo from '../components/Logo'
 
 const DAYS = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']
 const INTERESTS = [
@@ -81,6 +82,7 @@ export default function VolunteerScreen() {
 
           {/* Header */}
           <View style={styles.header}>
+            <Logo width={140} height={52} />
             <View style={[styles.headerIcon, { backgroundColor: colors.green }]}>
               <Ionicons name="people" size={28} color={colors.white} />
             </View>

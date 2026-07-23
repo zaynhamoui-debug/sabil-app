@@ -6,6 +6,7 @@ import {
 import { SafeAreaView } from 'react-native-safe-area-context'
 import { Ionicons } from '@expo/vector-icons'
 import { colors, font, radius } from '../theme'
+import Logo from '../components/Logo'
 
 const PRESET_AMOUNTS = [10, 25, 50, 100, 250, 500]
 
@@ -51,6 +52,7 @@ export default function DonateScreen() {
 
         {/* Header */}
         <View style={styles.header}>
+          <Logo width={140} height={52} />
           <Ionicons name="heart" size={32} color={colors.primary} />
           <Text style={styles.title}>Make a Difference</Text>
           <Text style={styles.subtitle}>
