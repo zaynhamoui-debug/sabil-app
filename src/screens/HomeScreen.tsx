@@ -1,7 +1,7 @@
 import React from 'react'
 import {
   View, Text, ScrollView, TouchableOpacity,
-  StyleSheet, Dimensions, Linking,
+  StyleSheet, Dimensions, Linking, Image,
 } from 'react-native'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import { Ionicons } from '@expo/vector-icons'
@@ -14,31 +14,15 @@ import Logo from '../components/Logo'
 const { width } = Dimensions.get('window')
 type Nav = BottomTabNavigationProp<TabParamList>
 
+const HERO_IMAGE    = 'https://www.sabil.us/wp-content/uploads/2023/07/ggg.png'
+const ABOUT_PHOTO   = 'https://www.sabil.us/wp-content/uploads/2026/03/PHOTO-2023-06-19-09-35-25-1.webp'
+const EVENT_IMAGE   = 'https://www.sabil.us/wp-content/uploads/2026/03/2024-10-20-Day-of-Dignity-128-scaled-1.webp'
+
 const PROGRAMS = [
-  {
-    icon: 'basket-outline' as const,
-    title: 'Food Distribution',
-    description: 'Food distribution being one of our biggest services. We provide nutritious groceries to families facing food insecurity.',
-    color: colors.green,
-  },
-  {
-    icon: 'home-outline' as const,
-    title: 'Rental Assistance',
-    description: 'Emergency financial support to help families avoid eviction and maintain stable housing.',
-    color: colors.teal,
-  },
-  {
-    icon: 'medkit-outline' as const,
-    title: 'Health Services',
-    description: 'Connecting community members with equitable health resources, screenings, and referrals.',
-    color: '#E05A2B',
-  },
-  {
-    icon: 'cash-outline' as const,
-    title: 'Financial Security',
-    description: 'Counseling and direct assistance to build long-term financial stability for individuals and families.',
-    color: '#7B5EA7',
-  },
+  { icon: 'basket-outline' as const, title: 'Food Distribution',  description: 'Weekly food pantry providing nutritious groceries to families in need.', color: colors.green },
+  { icon: 'home-outline' as const,   title: 'Rental Assistance',  description: 'Emergency financial support to help families avoid eviction.',          color: colors.teal },
+  { icon: 'medkit-outline' as const, title: 'Health Services',    description: 'Connecting community members with health resources and referrals.',      color: '#E05A2B' },
+  { icon: 'cash-outline' as const,   title: 'Financial Security', description: 'Counseling and assistance to build long-term financial stability.',      color: '#7B5EA7' },
 ]
 
 export default function HomeScreen() {
@@ -50,40 +34,43 @@ export default function HomeScreen() {
 
         {/* Header */}
         <View style={styles.header}>
-          <Logo width={140} height={52} />
-          <TouchableOpacity style={styles.donateHeaderBtn} onPress={() => navigation.navigate('Donate')}>
-            <Text style={styles.donateHeaderText}>Donate</Text>
+          <Logo width={130} height={50} />
+          <TouchableOpacity style={styles.donateBtn} onPress={() => navigation.navigate('Donate')}>
+            <Ionicons name="heart" size={14} color={colors.text} />
+            <Text style={styles.donateBtnText}>Donate</Text>
           </TouchableOpacity>
         </View>
 
-        {/* Hero Banner */}
-        <View style={styles.hero}>
-          <View style={styles.heroBadge}>
-            <Ionicons name="leaf" size={12} color={colors.green} />
-            <Text style={styles.heroBadgeText}>Health & Human Services Nonprofit</Text>
-          </View>
-          <Text style={styles.heroTitle}>Serving Our{'\n'}Community With{'\n'}Dignity & Respect</Text>
-          <Text style={styles.heroText}>
-            Providing equitable food, health, and financial security to individuals and families in need.
-          </Text>
-          <View style={styles.heroActions}>
-            <TouchableOpacity style={styles.heroBtn} onPress={() => navigation.navigate('Apply')}>
-              <Text style={styles.heroBtnText}>Apply for Assistance</Text>
-            </TouchableOpacity>
-            <TouchableOpacity style={styles.heroSecondBtn} onPress={() => navigation.navigate('Donate')}>
-              <Ionicons name="heart" size={16} color={colors.primary} />
-              <Text style={styles.heroSecondBtnText}>Donate</Text>
-            </TouchableOpacity>
+        {/* Hero — full-width image with overlay */}
+        <View style={styles.heroWrap}>
+          <Image source={{ uri: HERO_IMAGE }} style={styles.heroImage} resizeMode="cover" />
+          <View style={styles.heroOverlay}>
+            <View style={styles.heroBadge}>
+              <Ionicons name="leaf" size={11} color={colors.white} />
+              <Text style={styles.heroBadgeText}>Health & Human Services Nonprofit</Text>
+            </View>
+            <Text style={styles.heroTitle}>Serving Our{'\n'}Community With{'\n'}Dignity & Respect</Text>
+            <Text style={styles.heroSub}>
+              Providing equitable food, health, and financial security to families in need.
+            </Text>
+            <View style={styles.heroActions}>
+              <TouchableOpacity style={styles.heroPrimaryBtn} onPress={() => navigation.navigate('Apply')}>
+                <Text style={styles.heroPrimaryBtnText}>Apply for Assistance</Text>
+              </TouchableOpacity>
+              <TouchableOpacity style={styles.heroSecondaryBtn} onPress={() => navigation.navigate('Donate')}>
+                <Text style={styles.heroSecondaryBtnText}>Donate</Text>
+              </TouchableOpacity>
+            </View>
           </View>
         </View>
 
         {/* Quick Actions */}
         <View style={styles.quickGrid}>
           {[
-            { icon: 'heart' as const,     label: 'Donate',    tab: 'Donate' as const,    bg: colors.primary, fg: colors.text },
-            { icon: 'people' as const,    label: 'Volunteer', tab: 'Volunteer' as const, bg: colors.green,   fg: colors.white },
-            { icon: 'document-text' as const, label: 'Apply',  tab: 'Apply' as const,   bg: colors.teal,    fg: colors.white },
-            { icon: 'information-circle' as const, label: 'About Us', tab: 'About' as const, bg: '#F2F2F2', fg: colors.gray },
+            { icon: 'heart' as const,         label: 'Donate',    tab: 'Donate' as const,    bg: colors.primary, fg: colors.text },
+            { icon: 'people' as const,         label: 'Volunteer', tab: 'Volunteer' as const, bg: colors.green,   fg: colors.white },
+            { icon: 'document-text' as const,  label: 'Apply',     tab: 'Apply' as const,     bg: colors.teal,    fg: colors.white },
+            { icon: 'information-circle' as const, label: 'About', tab: 'About' as const,     bg: '#EDEDED',      fg: colors.gray },
           ].map(a => (
             <TouchableOpacity key={a.label} style={[styles.quickCard, { backgroundColor: a.bg }]} onPress={() => navigation.navigate(a.tab)}>
               <Ionicons name={a.icon} size={26} color={a.fg} />
@@ -93,18 +80,14 @@ export default function HomeScreen() {
         </View>
 
         {/* Mission */}
-        <View style={styles.missionBlock}>
-          <View style={styles.missionHeader}>
-            <View style={styles.missionLine} />
-            <Text style={styles.missionLabel}>Our Mission</Text>
-            <View style={styles.missionLine} />
-          </View>
+        <View style={styles.missionCard}>
+          <Text style={styles.missionEyebrow}>Our Mission</Text>
           <Text style={styles.missionText}>
             "Sabil is a health and human services nonprofit that strives to improve an individual and family's quality of life by readily providing them with equitable food, health, and financial security with dignity and respect."
           </Text>
         </View>
 
-        {/* Stats */}
+        {/* Impact Stats */}
         <View style={styles.statsRow}>
           {[
             { num: '500+', label: 'Families\nServed' },
@@ -118,56 +101,68 @@ export default function HomeScreen() {
           ))}
         </View>
 
+        {/* Community Photo */}
+        <View style={styles.photoSection}>
+          <Image source={{ uri: ABOUT_PHOTO }} style={styles.communityPhoto} resizeMode="cover" />
+          <View style={styles.photoCaption}>
+            <Ionicons name="people" size={14} color={colors.green} />
+            <Text style={styles.photoCaptionText}>Building stronger communities together</Text>
+          </View>
+        </View>
+
         {/* Programs */}
         <View style={styles.sectionHeader}>
           <Text style={styles.sectionTitle}>Our Programs</Text>
-          <View style={styles.sectionTitleUnderline} />
+          <View style={styles.underline} />
         </View>
-
         {PROGRAMS.map(p => (
           <View key={p.title} style={styles.programCard}>
-            <View style={[styles.programIconWrap, { backgroundColor: p.color + '18' }]}>
-              <Ionicons name={p.icon} size={26} color={p.color} />
+            <View style={[styles.programIcon, { backgroundColor: p.color + '18' }]}>
+              <Ionicons name={p.icon} size={24} color={p.color} />
             </View>
-            <View style={styles.programContent}>
+            <View style={styles.programText}>
               <Text style={styles.programTitle}>{p.title}</Text>
               <Text style={styles.programDesc}>{p.description}</Text>
             </View>
           </View>
         ))}
 
-        {/* CTA Banner */}
-        <TouchableOpacity style={styles.ctaBanner} onPress={() => navigation.navigate('Apply')}>
+        {/* Event Photo Banner */}
+        <View style={styles.eventWrap}>
+          <Image source={{ uri: EVENT_IMAGE }} style={styles.eventImage} resizeMode="cover" />
+          <View style={styles.eventOverlay}>
+            <Text style={styles.eventLabel}>Day of Dignity Event</Text>
+            <Text style={styles.eventSub}>Serving the community with dignity & respect</Text>
+            <TouchableOpacity style={styles.eventBtn} onPress={() => navigation.navigate('Volunteer')}>
+              <Text style={styles.eventBtnText}>Join as Volunteer</Text>
+              <Ionicons name="arrow-forward" size={14} color={colors.text} />
+            </TouchableOpacity>
+          </View>
+        </View>
+
+        {/* Apply CTA */}
+        <TouchableOpacity style={styles.applyCTA} onPress={() => navigation.navigate('Apply')}>
           <View>
-            <Text style={styles.ctaTitle}>Need Assistance?</Text>
-            <Text style={styles.ctaSubtitle}>Apply for our programs today</Text>
+            <Text style={styles.applyTitle}>Need Assistance?</Text>
+            <Text style={styles.applySub}>Submit an application today</Text>
           </View>
-          <View style={styles.ctaArrow}>
-            <Ionicons name="arrow-forward" size={20} color={colors.text} />
+          <View style={styles.applyArrow}>
+            <Ionicons name="arrow-forward" size={18} color={colors.text} />
           </View>
         </TouchableOpacity>
 
-        {/* Volunteer Banner */}
-        <TouchableOpacity style={styles.volunteerBanner} onPress={() => navigation.navigate('Volunteer')}>
-          <Ionicons name="people-outline" size={24} color={colors.white} />
-          <View style={{ flex: 1 }}>
-            <Text style={styles.volunteerTitle}>Become a Volunteer</Text>
-            <Text style={styles.volunteerSub}>Join our community and make a difference</Text>
+        {/* Footer Contact */}
+        <View style={styles.footer}>
+          <Logo width={100} height={38} />
+          <View style={styles.footerLinks}>
+            <TouchableOpacity onPress={() => Linking.openURL('https://www.sabil.us')}>
+              <Text style={styles.footerLink}>www.sabil.us</Text>
+            </TouchableOpacity>
+            <Text style={styles.footerDot}>·</Text>
+            <TouchableOpacity onPress={() => Linking.openURL('mailto:info@sabil.us')}>
+              <Text style={styles.footerLink}>info@sabil.us</Text>
+            </TouchableOpacity>
           </View>
-          <Ionicons name="chevron-forward" size={18} color={colors.white + 'AA'} />
-        </TouchableOpacity>
-
-        {/* Contact */}
-        <View style={styles.contactBar}>
-          <TouchableOpacity style={styles.contactItem} onPress={() => Linking.openURL('https://www.sabil.us')}>
-            <Ionicons name="globe-outline" size={16} color={colors.teal} />
-            <Text style={styles.contactText}>www.sabil.us</Text>
-          </TouchableOpacity>
-          <View style={styles.contactDot} />
-          <TouchableOpacity style={styles.contactItem} onPress={() => Linking.openURL('mailto:info@sabil.us')}>
-            <Ionicons name="mail-outline" size={16} color={colors.teal} />
-            <Text style={styles.contactText}>info@sabil.us</Text>
-          </TouchableOpacity>
         </View>
 
         <View style={{ height: 32 }} />
@@ -177,68 +172,84 @@ export default function HomeScreen() {
 }
 
 const styles = StyleSheet.create({
-  safe:         { flex: 1, backgroundColor: colors.offWhite },
-  scroll:       { padding: 20 },
-  header:       { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginBottom: 20 },
-  donateHeaderBtn: { backgroundColor: colors.primary, borderRadius: radius.full, paddingHorizontal: 16, paddingVertical: 8 },
-  donateHeaderText: { fontSize: font.sm, fontWeight: '700', color: colors.text },
-  hero: {
-    backgroundColor: colors.green, borderRadius: radius.xl,
-    padding: 24, marginBottom: 20,
-  },
-  heroBadge:    { flexDirection: 'row', alignItems: 'center', gap: 6, backgroundColor: colors.white + '25', borderRadius: radius.full, paddingHorizontal: 10, paddingVertical: 5, alignSelf: 'flex-start', marginBottom: 14 },
+  safe:    { flex: 1, backgroundColor: colors.offWhite },
+  scroll:  { paddingBottom: 20 },
+  header:  { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', paddingHorizontal: 20, paddingTop: 16, paddingBottom: 12 },
+  donateBtn: { flexDirection: 'row', alignItems: 'center', gap: 5, backgroundColor: colors.primary, borderRadius: radius.full, paddingHorizontal: 14, paddingVertical: 8 },
+  donateBtnText: { fontSize: font.sm, fontWeight: '700', color: colors.text },
+
+  // Hero
+  heroWrap:    { marginHorizontal: 16, borderRadius: radius.xl, overflow: 'hidden', marginBottom: 20, height: 380 },
+  heroImage:   { position: 'absolute', width: '100%', height: '100%' },
+  heroOverlay: { flex: 1, backgroundColor: 'rgba(15,40,20,0.62)', padding: 22, justifyContent: 'flex-end' },
+  heroBadge:   { flexDirection: 'row', alignItems: 'center', gap: 5, backgroundColor: 'rgba(255,255,255,0.18)', borderRadius: radius.full, paddingHorizontal: 10, paddingVertical: 4, alignSelf: 'flex-start', marginBottom: 14 },
   heroBadgeText: { fontSize: 11, color: colors.white, fontWeight: '600' },
-  heroTitle:    { fontSize: 28, fontWeight: '900', color: colors.white, lineHeight: 34, marginBottom: 12 },
-  heroText:     { fontSize: font.base, color: colors.white + 'CC', lineHeight: 22, marginBottom: 22 },
-  heroActions:  { flexDirection: 'row', gap: 10, flexWrap: 'wrap' },
-  heroBtn:      { backgroundColor: colors.primary, borderRadius: radius.full, paddingHorizontal: 20, paddingVertical: 12 },
-  heroBtnText:  { fontSize: font.sm, fontWeight: '800', color: colors.text },
-  heroSecondBtn: { flexDirection: 'row', alignItems: 'center', gap: 6, backgroundColor: colors.white, borderRadius: radius.full, paddingHorizontal: 18, paddingVertical: 12 },
-  heroSecondBtnText: { fontSize: font.sm, fontWeight: '700', color: colors.primary },
-  quickGrid:    { flexDirection: 'row', flexWrap: 'wrap', gap: 10, marginBottom: 24 },
-  quickCard:    { width: (width - 50) / 2, borderRadius: radius.lg, padding: 18, alignItems: 'center', gap: 8 },
-  quickLabel:   { fontSize: font.base, fontWeight: '700' },
-  missionBlock: { backgroundColor: colors.white, borderRadius: radius.lg, padding: 20, marginBottom: 20, shadowColor: '#000', shadowOpacity: 0.04, shadowRadius: 8, elevation: 1 },
-  missionHeader: { flexDirection: 'row', alignItems: 'center', gap: 10, marginBottom: 14 },
-  missionLine:  { flex: 1, height: 1, backgroundColor: colors.border },
-  missionLabel: { fontSize: font.sm, fontWeight: '700', color: colors.textMuted, textTransform: 'uppercase', letterSpacing: 1 },
-  missionText:  { fontSize: font.base, color: colors.text, lineHeight: 24, fontStyle: 'italic' },
-  statsRow:     { flexDirection: 'row', gap: 10, marginBottom: 24 },
-  statCard: {
-    flex: 1, backgroundColor: colors.primary + '18',
-    borderRadius: radius.md, padding: 14, alignItems: 'center',
-  },
-  statNum:      { fontSize: font.xl, fontWeight: '900', color: colors.green },
-  statLabel:    { fontSize: 11, color: colors.textMuted, textAlign: 'center', marginTop: 3, lineHeight: 14 },
-  sectionHeader: { marginBottom: 14 },
+  heroTitle:   { fontSize: 26, fontWeight: '900', color: colors.white, lineHeight: 32, marginBottom: 10 },
+  heroSub:     { fontSize: font.sm, color: 'rgba(255,255,255,0.80)', lineHeight: 20, marginBottom: 20 },
+  heroActions: { flexDirection: 'row', gap: 10 },
+  heroPrimaryBtn:  { backgroundColor: colors.primary, borderRadius: radius.full, paddingHorizontal: 18, paddingVertical: 11 },
+  heroPrimaryBtnText: { fontSize: font.sm, fontWeight: '800', color: colors.text },
+  heroSecondaryBtn:  { backgroundColor: 'rgba(255,255,255,0.20)', borderRadius: radius.full, paddingHorizontal: 18, paddingVertical: 11, borderWidth: 1, borderColor: 'rgba(255,255,255,0.40)' },
+  heroSecondaryBtnText: { fontSize: font.sm, fontWeight: '700', color: colors.white },
+
+  // Quick Grid
+  quickGrid: { flexDirection: 'row', flexWrap: 'wrap', gap: 10, paddingHorizontal: 16, marginBottom: 20 },
+  quickCard: { width: (width - 52) / 2, borderRadius: radius.lg, padding: 18, alignItems: 'center', gap: 8 },
+  quickLabel: { fontSize: font.base, fontWeight: '700' },
+
+  // Mission
+  missionCard: { marginHorizontal: 16, backgroundColor: colors.green, borderRadius: radius.xl, padding: 20, marginBottom: 20 },
+  missionEyebrow: { fontSize: 11, fontWeight: '700', color: 'rgba(255,255,255,0.6)', textTransform: 'uppercase', letterSpacing: 1, marginBottom: 8 },
+  missionText: { fontSize: font.base, color: colors.white, lineHeight: 24, fontStyle: 'italic' },
+
+  // Stats
+  statsRow: { flexDirection: 'row', gap: 10, paddingHorizontal: 16, marginBottom: 20 },
+  statCard: { flex: 1, backgroundColor: colors.primary + '20', borderRadius: radius.md, padding: 14, alignItems: 'center' },
+  statNum:  { fontSize: 22, fontWeight: '900', color: colors.green },
+  statLabel: { fontSize: 11, color: colors.textMuted, textAlign: 'center', marginTop: 3, lineHeight: 14 },
+
+  // Community Photo
+  photoSection: { marginHorizontal: 16, marginBottom: 24 },
+  communityPhoto: { width: '100%', height: 200, borderRadius: radius.xl, backgroundColor: colors.lightGray },
+  photoCaption: { flexDirection: 'row', alignItems: 'center', gap: 6, marginTop: 8, paddingHorizontal: 4 },
+  photoCaptionText: { fontSize: font.sm, color: colors.textMuted, fontStyle: 'italic' },
+
+  // Programs
+  sectionHeader: { paddingHorizontal: 16, marginBottom: 14 },
   sectionTitle:  { fontSize: font.lg, fontWeight: '800', color: colors.text },
-  sectionTitleUnderline: { width: 40, height: 3, backgroundColor: colors.primary, borderRadius: 2, marginTop: 4 },
+  underline:     { width: 36, height: 3, backgroundColor: colors.primary, borderRadius: 2, marginTop: 4 },
   programCard: {
+    flexDirection: 'row', gap: 14, alignItems: 'flex-start',
     backgroundColor: colors.white, borderRadius: radius.md,
-    padding: 16, flexDirection: 'row', gap: 14, alignItems: 'flex-start',
-    marginBottom: 10, shadowColor: '#000', shadowOpacity: 0.04, shadowRadius: 6, elevation: 1,
+    marginHorizontal: 16, padding: 14, marginBottom: 10,
+    shadowColor: '#000', shadowOpacity: 0.04, shadowRadius: 6, elevation: 1,
   },
-  programIconWrap: { width: 50, height: 50, borderRadius: radius.md, alignItems: 'center', justifyContent: 'center', flexShrink: 0 },
-  programContent:  { flex: 1 },
-  programTitle:    { fontSize: font.base, fontWeight: '700', color: colors.text, marginBottom: 4 },
-  programDesc:     { fontSize: font.sm, color: colors.textMuted, lineHeight: 18 },
-  ctaBanner: {
-    backgroundColor: colors.primary, borderRadius: radius.lg,
-    padding: 20, flexDirection: 'row', alignItems: 'center',
-    justifyContent: 'space-between', marginTop: 10, marginBottom: 10,
+  programIcon: { width: 48, height: 48, borderRadius: radius.md, alignItems: 'center', justifyContent: 'center', flexShrink: 0 },
+  programText: { flex: 1 },
+  programTitle: { fontSize: font.base, fontWeight: '700', color: colors.text, marginBottom: 3 },
+  programDesc:  { fontSize: font.sm, color: colors.textMuted, lineHeight: 18 },
+
+  // Event Photo Banner
+  eventWrap:    { marginHorizontal: 16, borderRadius: radius.xl, overflow: 'hidden', marginTop: 10, marginBottom: 16, height: 220 },
+  eventImage:   { position: 'absolute', width: '100%', height: '100%', backgroundColor: colors.lightGray },
+  eventOverlay: { flex: 1, backgroundColor: 'rgba(10,30,18,0.60)', padding: 20, justifyContent: 'flex-end' },
+  eventLabel:   { fontSize: font.md, fontWeight: '800', color: colors.white, marginBottom: 4 },
+  eventSub:     { fontSize: font.sm, color: 'rgba(255,255,255,0.75)', marginBottom: 14 },
+  eventBtn:     { flexDirection: 'row', alignItems: 'center', gap: 6, backgroundColor: colors.primary, borderRadius: radius.full, alignSelf: 'flex-start', paddingHorizontal: 16, paddingVertical: 9 },
+  eventBtnText: { fontSize: font.sm, fontWeight: '700', color: colors.text },
+
+  // Apply CTA
+  applyCTA: {
+    marginHorizontal: 16, backgroundColor: colors.primary, borderRadius: radius.lg,
+    padding: 20, flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', marginBottom: 20,
   },
-  ctaTitle:    { fontSize: font.md, fontWeight: '800', color: colors.text },
-  ctaSubtitle: { fontSize: font.sm, color: colors.text + 'BB', marginTop: 2 },
-  ctaArrow:    { width: 40, height: 40, borderRadius: radius.full, backgroundColor: colors.white, alignItems: 'center', justifyContent: 'center' },
-  volunteerBanner: {
-    backgroundColor: colors.green, borderRadius: radius.lg,
-    padding: 18, flexDirection: 'row', alignItems: 'center',
-    gap: 12, marginBottom: 16,
-  },
-  volunteerTitle: { fontSize: font.base, fontWeight: '700', color: colors.white },
-  volunteerSub:   { fontSize: font.sm, color: colors.white + 'BB', marginTop: 1 },
-  contactBar:     { flexDirection: 'row', alignItems: 'center', justifyContent: 'center', gap: 12 },
-  contactItem:    { flexDirection: 'row', alignItems: 'center', gap: 6 },
-  contactText:    { fontSize: font.sm, color: colors.teal, fontWeight: '500' },
-  contactDot:     { width: 4, height: 4, borderRadius: 2, backgroundColor: colors.border },
+  applyTitle: { fontSize: font.md, fontWeight: '800', color: colors.text },
+  applySub:   { fontSize: font.sm, color: colors.text + 'BB', marginTop: 2 },
+  applyArrow: { width: 40, height: 40, borderRadius: radius.full, backgroundColor: colors.white, alignItems: 'center', justifyContent: 'center' },
+
+  // Footer
+  footer:      { alignItems: 'center', gap: 10, paddingHorizontal: 16, paddingTop: 8 },
+  footerLinks: { flexDirection: 'row', alignItems: 'center', gap: 8 },
+  footerLink:  { fontSize: font.sm, color: colors.teal, fontWeight: '500' },
+  footerDot:   { fontSize: font.sm, color: colors.border },
 })
