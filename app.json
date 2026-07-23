@@ -1,0 +1,32 @@
+{
+  "expo": {
+    "name": "Sabil USA",
+    "slug": "sabil-app",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "icon": "./assets/icon.png",
+    "userInterfaceStyle": "light",
+    "splash": {
+      "image": "./assets/splash.png",
+      "resizeMode": "contain",
+      "backgroundColor": "#FFB319"
+    },
+    "ios": {
+      "supportsTablet": true,
+      "bundleIdentifier": "org.sabilusa.app"
+    },
+    "android": {
+      "adaptiveIcon": {
+        "foregroundImage": "./assets/adaptive-icon.png",
+        "backgroundColor": "#FFB319"
+      },
+      "package": "org.sabilusa.app"
+    },
+    "web": {
+      "favicon": "./assets/favicon.png"
+    },
+    "plugins": [
+      "expo-font"
+    ]
+  }
+}
