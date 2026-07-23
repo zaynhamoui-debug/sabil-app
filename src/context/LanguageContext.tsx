@@ -1,7 +1,7 @@
 import React, { createContext, useContext, useState, useEffect } from 'react'
 import AsyncStorage from '@react-native-async-storage/async-storage'
 
-export type LangCode = 'en' | 'ar' | 'fa' | 'es'
+export type LangCode = 'en' | 'ar' | 'fa' | 'es' | 'tr'
 
 export interface Translations {
   // Navigation
@@ -428,8 +428,94 @@ const ES: Translations = {
   notifEnable: 'Activar Recordatorios', notifSkip: 'Ahora No', notifEnabled: 'Recordatorios Activados ✓',
 }
 
-export const TRANSLATIONS: Record<LangCode, Translations> = { en: EN, ar: AR, fa: FA, es: ES }
-export const LANG_LABELS: Record<LangCode, string> = { en: 'English', ar: 'العربية', fa: 'فارسی', es: 'Español' }
+// ─── Turkish ───────────────────────────────────────────────────────────────
+const TR: Translations = {
+  home: 'Ana Sayfa', donate: 'Bağış Yap', volunteer: 'Gönüllü Ol', services: 'Hizmetler', about: 'Hakkımızda',
+  heroTitle: 'Topluluğumuza\nOnur ve Saygıyla\nHizmet Ediyoruz',
+  heroSub: 'İhtiyaç sahibi ailelere eşit gıda, sağlık ve finansal güvenlik sağlıyoruz.',
+  missionQuote: '"Sabil, bireylerin ve ailelerin yaşam kalitesini onur ve saygıyla eşit gıda, sağlık ve finansal güvenlik sağlayarak geliştirmeye çalışan bir sağlık ve sosyal hizmetler sivil toplum kuruluşudur."',
+  applyForAssistance: 'Yardım Başvurusu', ourMission: 'Misyonumuz', ourPrograms: 'Programlarımız',
+  needAssistance: 'Yardıma mı İhtiyacınız Var?', submitApplicationToday: 'Bugün başvurun',
+  joinAsVolunteer: 'Gönüllü Olarak Katılın', dayOfDignityEvent: 'Onur Günü Etkinliği',
+  servingWithDignity: 'Topluluğa onur ve saygıyla hizmet ediyoruz',
+  buildingStrongerCommunities: 'Birlikte daha güçlü topluluklar inşa ediyoruz',
+  familiesServed: 'Hizmet\nEdilen Aile', mealsDistributed: 'Dağıtılan\nYemek', communityVolunteers: 'Topluluk\nGönüllüsü',
+  healthHumanServices: 'Sağlık ve İnsani Hizmetler Sivil Toplum Kuruluşu',
+  getHelp: 'Yardım Al', chooseService: 'İhtiyacınız olan yardım türünü seçin.',
+  foodAssistance: 'Gıda Yardımı', foodAssistanceDesc: 'Aileler için haftalık gıda bankası, acil market ve beslenme desteği.',
+  rentalAssistance: 'Kira Yardımı', rentalAssistanceDesc: 'Tahliyeyi önlemek ve ailenizin evde kalmasını sağlamak için acil mali destek.',
+  applyNow: 'Şimdi Başvur',
+  foodAssistanceTitle: 'Gıda Yardımı\nBaşvurusu', foodHeroSub: 'Gıda bankamız, acil market ve beslenme programları için başvurun.',
+  readyToApplyFood: 'Gıda Yardımı İçin Başvurmaya Hazır mısınız?', foodFormTime: 'Gıda yardımı başvurusu yaklaşık 5-10 dakika sürer.',
+  openFoodForm: 'Gıda Yardımı Formunu Aç', officialFoodForm: 'Sabil USA resmi gıda yardımı başvurusunu açar',
+  whatWeProvide: 'Neler Sağlıyoruz',
+  weeklyGroceries: 'Haftalık Market', weeklyGroceriesDesc: 'Her hafta taze ürünler ve temel ihtiyaçlar.',
+  emergencyFood: 'Acil Gıda Paketleri', emergencyFoodDesc: 'Kriz durumundaki ailelere anlık gıda desteği.',
+  nutritionSupport: 'Beslenme Desteği', nutritionSupportDesc: 'Sağlıklı beslenme rehberliği ve özel diyet ürünlerine erişim.',
+  communityPantry: 'Topluluk Gıda Bankası', communityPantryDesc: 'Dağıtım saatlerinde uygun haneler için gıda bankasına erişim.',
+  docsToPrep: 'Hazırlanacak Belgeler', docsSpeedUp: 'Bu belgeleri hazır bulundurmak başvurunuzu hızlandıracaktır:',
+  doc_id: 'Devlet tarafından verilmiş fotoğraflı kimlik', doc_income: 'Gelir belgesi veya yardım mektubu',
+  doc_household: 'Hane büyüklüğü belgesi (doğum sertifikaları, okul kayıtları)',
+  doc_address: 'Güncel adres belgesi (fatura veya kira sözleşmesi)',
+  startFoodApp: 'Gıda Yardımı Başvurusunu Başlat',
+  rentalAssistanceTitle: 'Kira Yardımı\nBaşvurusu', rentalHeroSub: 'Tahliyeyi önlemek ve evde kalmak için acil kira desteği başvurusu yapın.',
+  readyToApplyRental: 'Kira Yardımı İçin Başvurmaya Hazır mısınız?', rentalFormTime: 'Başvuru yaklaşık 10-15 dakika sürer.',
+  openRentalForm: 'Kira Yardımı Formunu Aç', officialRentalForm: 'Sabil USA resmi kira yardımı başvurusunu açar',
+  whatWeHelpWith: 'Nasıl Yardımcı Oluyoruz',
+  rentalDoc_id: 'Devlet tarafından verilmiş fotoğraflı kimlik (ehliyet, pasaport veya kimlik kartı)',
+  rentalDoc_income: 'Gelir belgesi (maaş bordrosu, yardım mektubu veya banka ekstreleri)',
+  rentalDoc_lease: 'Mevcut kira sözleşmenizin kopyası',
+  rentalDoc_eviction: 'Tahliye bildirimleri veya hizmet kesinti bildirimleri (varsa)',
+  rentalDoc_ssn: 'Tüm hane üyeleri için Sosyal Güvenlik kartları',
+  rentalDoc_address: 'Adres belgesi (fatura veya banka ekstresi)',
+  startRentalApp: 'Kira Yardımı Başvurusunu Başlat',
+  haveQuestions: 'Sorularınız mı Var?', teamHereToHelp: 'Ekibimiz sizi süreç boyunca yönlendirmek için burada.',
+  emailUs: 'E-posta Gönderin', visitWebsite: 'Web Sitesini Ziyaret Et',
+  volunteerWithUs: 'Bizimle Gönüllü Olun', volunteerSubtitle: 'Ailelerin hayatında gerçek fark yaratan fedakâr gönüllüler topluluğumuza katılın.',
+  directImpact: 'Topluluğunuzda doğrudan etki yaratın', meaningfulConnections: 'Anlamlı bağlantılar kurun', gainSkills: 'Beceri ve deneyim kazanın',
+  yourInformation: 'Bilgileriniz', firstName: 'Ad', lastName: 'Soyad',
+  emailAddress: 'E-posta Adresi', phoneNumber: 'Telefon Numarası', availability: 'Müsaitlik',
+  areasOfInterest: 'İlgi Alanları', anythingElse: 'Eklemek İstediğiniz Başka Bir Şey Var mı?',
+  anythingPlaceholder: 'Beceriler, deneyim, sorular...',
+  submitApplication: 'Başvuru Gönder', submitting: 'Gönderiliyor...',
+  thankYou: 'Teşekkürler!', volunteerSuccessText: 'Gönüllü başvurunuzu aldık. Ekibimiz 2-3 iş günü içinde sizinle iletişime geçecek.',
+  submitAnother: 'Başka Bir Başvuru Gönder',
+  missingInfo: 'Eksik Bilgi', missingInfoMsg: 'Devam etmek için lütfen adınızı ve e-postanızı doldurun.',
+  invalidEmail: 'Geçersiz E-posta', invalidEmailMsg: 'Lütfen geçerli bir e-posta adresi girin.',
+  days: ['Pzt', 'Sal', 'Çar', 'Per', 'Cum', 'Cmt', 'Paz'],
+  interest_food: 'Gıda Dağıtımı', interest_admin: 'İdari ve Ofis', interest_events: 'Etkinlik ve Tanıtım',
+  interest_health: 'Sağlık Programları', interest_youth: 'Gençlik Programları', interest_driving: 'Sürücülük ve Teslimat',
+  makeADifference: 'Fark Yarat', donateSubtitle: 'Bağışınız Sabil USA\'nın ailelere gıda, konut ve sağlık desteği sağlamasına yardımcı olur.',
+  selectAmount: 'Miktar Seçin', customAmount: 'Veya Özel Miktar Girin', oneTime: 'Tek Seferlik', monthly: 'Aylık',
+  amountLabel: 'Miktar', frequencyLabel: 'Sıklık',
+  taxDeductible: 'Vergiden Düşülebilir', securePayment: 'Güvenli Ödeme', toPrograms: '%%100 Programlara',
+  opening: 'Açılıyor...', invalidAmount: 'Geçersiz Miktar', invalidAmountMsg: 'Lütfen geçerli bir bağış miktarı girin.',
+  impact_10: 'Bir kişiye bir haftalık market sağlar',
+  impact_25: 'Bir aileye bir haftalık acil gıda karşılar',
+  impact_50: 'Bir aylık fatura yardımına katkıda bulunur',
+  impact_100: 'Bir aylık kira desteğine katkıda bulunur',
+  impact_250: 'Dört kişilik aile için bir aylık öğünleri finanse eder',
+  impact_500: 'İhtiyaç sahibi bir aile için kapsamlı destek sağlar',
+  ourValues: 'Değerlerimiz', whatWeDo: 'Ne Yapıyoruz', getInTouch: 'Bize Ulaşın',
+  website: 'Web Sitesi', email: 'E-posta', volunteerInquiries: 'Gönüllülük Sorguları',
+  nonprofitTitle: '501(c)(3) Kar Amacı Gütmeyen Kuruluş', nonprofitDesc: 'Sabil USA kayıtlı bir kar amacı gütmeyen kuruluştur. Tüm bağışlar yasaların izin verdiği ölçüde vergiden düşülebilir.',
+  supportMission: 'Misyonumuzu Destekleyin', appVersion: 'Sabil USA Uygulaması · v1.0.0',
+  val_dignity: 'Onur', val_dignity_desc: 'Her insan saygı ve şefkatle muamele görmeyi hak eder.',
+  val_equity: 'Eşitlik', val_equity_desc: 'Her aileyle bulundukları yerde bireysel destek sunarak buluşuruz.',
+  val_integrity: 'Dürüstlük', val_integrity_desc: 'Topluluğumuza karşı sorumlu ve tüm işlerimizde şeffafız.',
+  val_community: 'Topluluk', val_community_desc: 'Güçlü toplulukların herkesi yukarı kaldırdığı inancına dayalıyız.',
+  prog_food: 'Gıda Dağıtımı', prog_food_desc: 'Gıda güvensizliği yaşayan aileler için haftalık gıda bankası ve acil market.',
+  prog_rental: 'Kira Yardımı', prog_rental_desc: 'Tahliyeyi önlemek ve ailelerin evde kalmasını sağlamak için acil mali destek.',
+  prog_health: 'Sağlık Hizmetleri', prog_health_desc: 'Topluluk üyelerini sağlık kaynakları, taramalar ve yönlendirmelerle buluşturmak.',
+  prog_finance: 'Mali Güvenlik', prog_finance_desc: 'Uzun vadeli ekonomik istikrar oluşturmak için danışmanlık ve doğrudan yardım.',
+  notifTitle: 'Gıda Dağıtım Günü!', notifBody: 'Bugün Sabil USA gıda dağıtım günü. Marketinizi almaya gelin!',
+  enableNotifications: 'Bildirimleri Etkinleştir', notifPromptTitle: 'Haberdar Olun', notifDayLabel: 'Dağıtım günlerinde beni bildir',
+  notifPromptDesc: 'Hiçbir dağıtımı kaçırmamak için gıda dağıtım günlerinde hatırlatıcı alın.',
+  notifEnable: 'Hatırlatıcıları Etkinleştir', notifSkip: 'Şimdi Değil', notifEnabled: 'Hatırlatıcılar Etkinleştirildi ✓',
+}
+
+export const TRANSLATIONS: Record<LangCode, Translations> = { en: EN, ar: AR, fa: FA, es: ES, tr: TR }
+export const LANG_LABELS: Record<LangCode, string> = { en: 'English', ar: 'العربية', fa: 'فارسی', es: 'Español', tr: 'Türkçe' }
 export const RTL_LANGS: LangCode[] = ['ar', 'fa']
 
 interface LanguageContextType {
