@@ -20,16 +20,16 @@ const HERO_IMAGE    = 'https://www.sabil.us/wp-content/uploads/2023/07/ggg.png'
 const ABOUT_PHOTO   = 'https://www.sabil.us/wp-content/uploads/2026/03/PHOTO-2023-06-19-09-35-25-1.webp'
 const EVENT_IMAGE   = 'https://www.sabil.us/wp-content/uploads/2026/03/2024-10-20-Day-of-Dignity-128-scaled-1.webp'
 
-const PROGRAMS = [
-  { icon: 'basket-outline' as const, title: 'Food Distribution',  description: 'Weekly food pantry providing nutritious groceries to families in need.', color: colors.green },
-  { icon: 'home-outline' as const,   title: 'Rental Assistance',  description: 'Emergency financial support to help families avoid eviction.',          color: colors.teal },
-  { icon: 'medkit-outline' as const, title: 'Health Services',    description: 'Connecting community members with health resources and referrals.',      color: '#E05A2B' },
-  { icon: 'cash-outline' as const,   title: 'Financial Security', description: 'Counseling and assistance to build long-term financial stability.',      color: '#7B5EA7' },
-]
-
 export default function HomeScreen() {
   const navigation = useNavigation<Nav>()
   const { t } = useLang()
+
+  const PROGRAMS = [
+    { icon: 'basket-outline' as const, title: t.prog_food,    description: t.prog_food_desc,    color: colors.green },
+    { icon: 'home-outline' as const,   title: t.prog_rental,  description: t.prog_rental_desc,  color: colors.teal },
+    { icon: 'medkit-outline' as const, title: t.prog_health,  description: t.prog_health_desc,  color: '#E05A2B' },
+    { icon: 'cash-outline' as const,   title: t.prog_finance, description: t.prog_finance_desc, color: '#7B5EA7' },
+  ]
 
   return (
     <SafeAreaView style={styles.safe} edges={['top']}>
