@@ -55,10 +55,8 @@ export default function HomeScreen() {
               <Ionicons name="leaf" size={11} color={colors.white} />
               <Text style={styles.heroBadgeText}>{t.healthHumanServices}</Text>
             </View>
-            <Text style={styles.heroTitle}>Serving Our{'\n'}Community With{'\n'}Dignity & Respect</Text>
-            <Text style={styles.heroSub}>
-              Providing equitable food, health, and financial security to families in need.
-            </Text>
+            <Text style={styles.heroTitle}>{t.heroTitle}</Text>
+            <Text style={styles.heroSub}>{t.heroSub}</Text>
             <View style={styles.heroActions}>
               <TouchableOpacity style={styles.heroPrimaryBtn} onPress={() => navigation.navigate('Services')}>
                 <Text style={styles.heroPrimaryBtnText}>{t.applyForAssistance}</Text>
@@ -88,9 +86,7 @@ export default function HomeScreen() {
         {/* Mission */}
         <View style={styles.missionCard}>
           <Text style={styles.missionEyebrow}>{t.ourMission}</Text>
-          <Text style={styles.missionText}>
-            "Sabil is a health and human services nonprofit that strives to improve an individual and family's quality of life by readily providing them with equitable food, health, and financial security with dignity and respect."
-          </Text>
+          <Text style={styles.missionText}>{t.missionQuote}</Text>
         </View>
 
         {/* Impact Stats */}

@@ -50,9 +50,7 @@ export default function AboutScreen() {
         {/* Mission */}
         <View style={styles.missionCard}>
           <Text style={[styles.missionLabel, isRTL && styles.textRight]}>{t.ourMission}</Text>
-          <Text style={[styles.missionText, isRTL && styles.textRight]}>
-            "Sabil is a health and human services nonprofit that strives to improve an individual and family's quality of life by readily providing them with equitable food, health, and financial security with dignity and respect."
-          </Text>
+          <Text style={[styles.missionText, isRTL && styles.textRight]}>{t.missionQuote}</Text>
         </View>
 
         {/* Values */}

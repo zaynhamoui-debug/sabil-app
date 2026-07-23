@@ -8,6 +8,7 @@ export interface Translations {
   home: string; donate: string; volunteer: string; services: string; about: string
 
   // Home
+  heroTitle: string; heroSub: string; missionQuote: string
   applyForAssistance: string; ourMission: string; ourPrograms: string
   needAssistance: string; submitApplicationToday: string; joinAsVolunteer: string
   dayOfDignityEvent: string; servingWithDignity: string; buildingStrongerCommunities: string
@@ -86,6 +87,9 @@ export interface Translations {
 // ─── English ───────────────────────────────────────────────────────────────
 const EN: Translations = {
   home: 'Home', donate: 'Donate', volunteer: 'Volunteer', services: 'Services', about: 'About',
+  heroTitle: 'Serving Our\nCommunity With\nDignity & Respect',
+  heroSub: 'Providing equitable food, health, and financial security to families in need.',
+  missionQuote: "\"Sabil is a health and human services nonprofit that strives to improve an individual and family's quality of life by readily providing them with equitable food, health, and financial security with dignity and respect.\"",
   applyForAssistance: 'Apply for Assistance', ourMission: 'Our Mission', ourPrograms: 'Our Programs',
   needAssistance: 'Need Assistance?', submitApplicationToday: 'Submit an application today',
   joinAsVolunteer: 'Join as Volunteer', dayOfDignityEvent: 'Day of Dignity Event',
@@ -169,6 +173,9 @@ const EN: Translations = {
 // ─── Arabic ────────────────────────────────────────────────────────────────
 const AR: Translations = {
   home: 'الرئيسية', donate: 'تبرع', volunteer: 'تطوع', services: 'الخدمات', about: 'عن سبيل',
+  heroTitle: 'نخدم مجتمعنا\nبكرامة\nواحترام',
+  heroSub: 'نوفر الغذاء والصحة والأمن المالي للعائلات المحتاجة بشكل عادل.',
+  missionQuote: '«سبيل منظمة غير ربحية للصحة والخدمات الإنسانية تسعى إلى تحسين جودة حياة الأفراد والأسر من خلال توفير الغذاء والصحة والأمن المالي بكرامة واحترام.»',
   applyForAssistance: 'التقدم للمساعدة', ourMission: 'مهمتنا', ourPrograms: 'برامجنا',
   needAssistance: 'هل تحتاج مساعدة؟', submitApplicationToday: 'قدّم طلبك اليوم',
   joinAsVolunteer: 'انضم كمتطوع', dayOfDignityEvent: 'يوم الكرامة',
@@ -252,6 +259,9 @@ const AR: Translations = {
 // ─── Farsi ─────────────────────────────────────────────────────────────────
 const FA: Translations = {
   home: 'خانه', donate: 'کمک مالی', volunteer: 'داوطلب', services: 'خدمات', about: 'درباره ما',
+  heroTitle: 'خدمت به جامعه‌مان\nبا کرامت\nو احترام',
+  heroSub: 'ارائه غذا، سلامت و امنیت مالی برابر به خانواده‌های نیازمند.',
+  missionQuote: '«سبیل یک سازمان غیرانتفاعی بهداشت و خدمات انسانی است که تلاش می‌کند با ارائه غذا، سلامت و امنیت مالی برابر با کرامت و احترام، کیفیت زندگی افراد و خانواده‌ها را بهبود بخشد.»',
   applyForAssistance: 'درخواست کمک', ourMission: 'مأموریت ما', ourPrograms: 'برنامه‌های ما',
   needAssistance: 'نیاز به کمک دارید؟', submitApplicationToday: 'امروز درخواست دهید',
   joinAsVolunteer: 'به عنوان داوطلب بپیوندید', dayOfDignityEvent: 'روز کرامت',
@@ -335,6 +345,9 @@ const FA: Translations = {
 // ─── Spanish ───────────────────────────────────────────────────────────────
 const ES: Translations = {
   home: 'Inicio', donate: 'Donar', volunteer: 'Voluntario', services: 'Servicios', about: 'Acerca de',
+  heroTitle: 'Sirviendo a\nNuestra Comunidad\ncon Dignidad',
+  heroSub: 'Brindando alimentos, salud y seguridad financiera equitativa a familias en necesidad.',
+  missionQuote: '"Sabil es una organización sin fines de lucro de salud y servicios humanos que se esfuerza por mejorar la calidad de vida de individuos y familias proporcionándoles alimentos, salud y seguridad financiera con dignidad y respeto."',
   applyForAssistance: 'Solicitar Ayuda', ourMission: 'Nuestra Misión', ourPrograms: 'Nuestros Programas',
   needAssistance: '¿Necesitas Ayuda?', submitApplicationToday: 'Envía una solicitud hoy',
   joinAsVolunteer: 'Únete como Voluntario', dayOfDignityEvent: 'Día de Dignidad',
