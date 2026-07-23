@@ -10,6 +10,8 @@ import type { BottomTabNavigationProp } from '@react-navigation/bottom-tabs'
 import type { TabParamList } from '../navigation/RootNavigator'
 import { colors, font, radius } from '../theme'
 import Logo from '../components/Logo'
+import LanguagePicker from '../components/LanguagePicker'
+import { useLang } from '../context/LanguageContext'
 
 const { width } = Dimensions.get('window')
 type Nav = BottomTabNavigationProp<TabParamList>
@@ -27,6 +29,7 @@ const PROGRAMS = [
 
 export default function HomeScreen() {
   const navigation = useNavigation<Nav>()
+  const { t } = useLang()
 
   return (
     <SafeAreaView style={styles.safe} edges={['top']}>
@@ -35,10 +38,13 @@ export default function HomeScreen() {
         {/* Header */}
         <View style={styles.header}>
           <Logo width={130} height={50} />
-          <TouchableOpacity style={styles.donateBtn} onPress={() => navigation.navigate('Donate')}>
-            <Ionicons name="heart" size={14} color={colors.text} />
-            <Text style={styles.donateBtnText}>Donate</Text>
-          </TouchableOpacity>
+          <View style={styles.headerRight}>
+            <LanguagePicker />
+            <TouchableOpacity style={styles.donateBtn} onPress={() => navigation.navigate('Donate')}>
+              <Ionicons name="heart" size={14} color={colors.text} />
+              <Text style={styles.donateBtnText}>{t.donate}</Text>
+            </TouchableOpacity>
+          </View>
         </View>
 
         {/* Hero — full-width image with overlay */}
@@ -47,18 +53,18 @@ export default function HomeScreen() {
           <View style={styles.heroOverlay}>
             <View style={styles.heroBadge}>
               <Ionicons name="leaf" size={11} color={colors.white} />
-              <Text style={styles.heroBadgeText}>Health & Human Services Nonprofit</Text>
+              <Text style={styles.heroBadgeText}>{t.healthHumanServices}</Text>
             </View>
             <Text style={styles.heroTitle}>Serving Our{'\n'}Community With{'\n'}Dignity & Respect</Text>
             <Text style={styles.heroSub}>
               Providing equitable food, health, and financial security to families in need.
             </Text>
             <View style={styles.heroActions}>
-              <TouchableOpacity style={styles.heroPrimaryBtn} onPress={() => navigation.navigate('Apply')}>
-                <Text style={styles.heroPrimaryBtnText}>Apply for Assistance</Text>
+              <TouchableOpacity style={styles.heroPrimaryBtn} onPress={() => navigation.navigate('Services')}>
+                <Text style={styles.heroPrimaryBtnText}>{t.applyForAssistance}</Text>
               </TouchableOpacity>
               <TouchableOpacity style={styles.heroSecondaryBtn} onPress={() => navigation.navigate('Donate')}>
-                <Text style={styles.heroSecondaryBtnText}>Donate</Text>
+                <Text style={styles.heroSecondaryBtnText}>{t.donate}</Text>
               </TouchableOpacity>
             </View>
           </View>
@@ -67,10 +73,10 @@ export default function HomeScreen() {
         {/* Quick Actions */}
         <View style={styles.quickGrid}>
           {[
-            { icon: 'heart' as const,         label: 'Donate',    tab: 'Donate' as const,    bg: colors.primary, fg: colors.text },
-            { icon: 'people' as const,         label: 'Volunteer', tab: 'Volunteer' as const, bg: colors.green,   fg: colors.white },
-            { icon: 'document-text' as const,  label: 'Apply',     tab: 'Apply' as const,     bg: colors.teal,    fg: colors.white },
-            { icon: 'information-circle' as const, label: 'About', tab: 'About' as const,     bg: '#EDEDED',      fg: colors.gray },
+            { icon: 'heart' as const,         label: t.donate,    tab: 'Donate' as const,    bg: colors.primary, fg: colors.text },
+            { icon: 'people' as const,         label: t.volunteer, tab: 'Volunteer' as const, bg: colors.green,   fg: colors.white },
+            { icon: 'apps' as const,           label: t.services,  tab: 'Services' as const,  bg: colors.teal,    fg: colors.white },
+            { icon: 'information-circle' as const, label: t.about, tab: 'About' as const,     bg: '#EDEDED',      fg: colors.gray },
           ].map(a => (
             <TouchableOpacity key={a.label} style={[styles.quickCard, { backgroundColor: a.bg }]} onPress={() => navigation.navigate(a.tab)}>
               <Ionicons name={a.icon} size={26} color={a.fg} />
@@ -81,7 +87,7 @@ export default function HomeScreen() {
 
         {/* Mission */}
         <View style={styles.missionCard}>
-          <Text style={styles.missionEyebrow}>Our Mission</Text>
+          <Text style={styles.missionEyebrow}>{t.ourMission}</Text>
           <Text style={styles.missionText}>
             "Sabil is a health and human services nonprofit that strives to improve an individual and family's quality of life by readily providing them with equitable food, health, and financial security with dignity and respect."
           </Text>
@@ -90,9 +96,9 @@ export default function HomeScreen() {
         {/* Impact Stats */}
         <View style={styles.statsRow}>
           {[
-            { num: '500+', label: 'Families\nServed' },
-            { num: '10K+', label: 'Meals\nDistributed' },
-            { num: '100+', label: 'Community\nVolunteers' },
+            { num: '500+', label: t.familiesServed },
+            { num: '10K+', label: t.mealsDistributed },
+            { num: '100+', label: t.communityVolunteers },
           ].map(s => (
             <View key={s.label} style={styles.statCard}>
               <Text style={styles.statNum}>{s.num}</Text>
@@ -106,13 +112,13 @@ export default function HomeScreen() {
           <Image source={{ uri: ABOUT_PHOTO }} style={styles.communityPhoto} resizeMode="cover" />
           <View style={styles.photoCaption}>
             <Ionicons name="people" size={14} color={colors.green} />
-            <Text style={styles.photoCaptionText}>Building stronger communities together</Text>
+            <Text style={styles.photoCaptionText}>{t.buildingStrongerCommunities}</Text>
           </View>
         </View>
 
         {/* Programs */}
         <View style={styles.sectionHeader}>
-          <Text style={styles.sectionTitle}>Our Programs</Text>
+          <Text style={styles.sectionTitle}>{t.ourPrograms}</Text>
           <View style={styles.underline} />
         </View>
         {PROGRAMS.map(p => (
@@ -131,20 +137,20 @@ export default function HomeScreen() {
         <View style={styles.eventWrap}>
           <Image source={{ uri: EVENT_IMAGE }} style={styles.eventImage} resizeMode="cover" />
           <View style={styles.eventOverlay}>
-            <Text style={styles.eventLabel}>Day of Dignity Event</Text>
-            <Text style={styles.eventSub}>Serving the community with dignity & respect</Text>
+            <Text style={styles.eventLabel}>{t.dayOfDignityEvent}</Text>
+            <Text style={styles.eventSub}>{t.servingWithDignity}</Text>
             <TouchableOpacity style={styles.eventBtn} onPress={() => navigation.navigate('Volunteer')}>
-              <Text style={styles.eventBtnText}>Join as Volunteer</Text>
+              <Text style={styles.eventBtnText}>{t.joinAsVolunteer}</Text>
               <Ionicons name="arrow-forward" size={14} color={colors.text} />
             </TouchableOpacity>
           </View>
         </View>
 
         {/* Apply CTA */}
-        <TouchableOpacity style={styles.applyCTA} onPress={() => navigation.navigate('Apply')}>
+        <TouchableOpacity style={styles.applyCTA} onPress={() => navigation.navigate('Services')}>
           <View>
-            <Text style={styles.applyTitle}>Need Assistance?</Text>
-            <Text style={styles.applySub}>Submit an application today</Text>
+            <Text style={styles.applyTitle}>{t.needAssistance}</Text>
+            <Text style={styles.applySub}>{t.submitApplicationToday}</Text>
           </View>
           <View style={styles.applyArrow}>
             <Ionicons name="arrow-forward" size={18} color={colors.text} />
@@ -174,7 +180,8 @@ export default function HomeScreen() {
 const styles = StyleSheet.create({
   safe:    { flex: 1, backgroundColor: colors.offWhite },
   scroll:  { paddingBottom: 20 },
-  header:  { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', paddingHorizontal: 20, paddingTop: 16, paddingBottom: 12 },
+  header:      { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', paddingHorizontal: 20, paddingTop: 16, paddingBottom: 12 },
+  headerRight: { flexDirection: 'row', alignItems: 'center', gap: 8 },
   donateBtn: { flexDirection: 'row', alignItems: 'center', gap: 5, backgroundColor: colors.primary, borderRadius: radius.full, paddingHorizontal: 14, paddingVertical: 8 },
   donateBtnText: { fontSize: font.sm, fontWeight: '700', color: colors.text },
 

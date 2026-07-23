@@ -1,36 +1,59 @@
 import React from 'react'
 import { NavigationContainer } from '@react-navigation/native'
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs'
+import { createNativeStackNavigator } from '@react-navigation/native-stack'
 import { Ionicons } from '@expo/vector-icons'
 import { colors, font } from '../theme'
 
-import HomeScreen      from '../screens/HomeScreen'
-import DonateScreen    from '../screens/DonateScreen'
-import VolunteerScreen from '../screens/VolunteerScreen'
-import ApplyScreen     from '../screens/ApplyScreen'
-import AboutScreen     from '../screens/AboutScreen'
+import HomeScreen             from '../screens/HomeScreen'
+import DonateScreen           from '../screens/DonateScreen'
+import VolunteerScreen        from '../screens/VolunteerScreen'
+import ServicesScreen         from '../screens/ServicesScreen'
+import FoodAssistanceScreen   from '../screens/FoodAssistanceScreen'
+import RentalAssistanceScreen from '../screens/RentalAssistanceScreen'
+import AboutScreen            from '../screens/AboutScreen'
+import { useLang }            from '../context/LanguageContext'
+
+export type ServicesStackParamList = {
+  ServicesHub:      undefined
+  FoodAssistance:   undefined
+  RentalAssistance: undefined
+}
 
 export type TabParamList = {
   Home:      undefined
   Donate:    undefined
   Volunteer: undefined
-  Apply:     undefined
+  Services:  undefined
   About:     undefined
 }
 
-const Tab = createBottomTabNavigator<TabParamList>()
+const Tab      = createBottomTabNavigator<TabParamList>()
+const ServicesStack = createNativeStackNavigator<ServicesStackParamList>()
 
 type IoniconsName = React.ComponentProps<typeof Ionicons>['name']
 
-const TAB_CONFIG: Record<keyof TabParamList, { icon: IoniconsName; iconFocused: IoniconsName; label: string }> = {
-  Home:      { icon: 'home-outline',          iconFocused: 'home',                label: 'Home' },
-  Donate:    { icon: 'heart-outline',         iconFocused: 'heart',               label: 'Donate' },
-  Volunteer: { icon: 'people-outline',        iconFocused: 'people',              label: 'Volunteer' },
-  Apply:     { icon: 'document-text-outline', iconFocused: 'document-text',       label: 'Apply' },
-  About:     { icon: 'information-circle-outline', iconFocused: 'information-circle', label: 'About' },
+function ServicesNavigator() {
+  return (
+    <ServicesStack.Navigator screenOptions={{ headerShown: false }}>
+      <ServicesStack.Screen name="ServicesHub"      component={ServicesScreen} />
+      <ServicesStack.Screen name="FoodAssistance"   component={FoodAssistanceScreen} />
+      <ServicesStack.Screen name="RentalAssistance" component={RentalAssistanceScreen} />
+    </ServicesStack.Navigator>
+  )
 }
 
 export default function RootNavigator() {
+  const { t } = useLang()
+
+  const TAB_CONFIG: Record<keyof TabParamList, { icon: IoniconsName; iconFocused: IoniconsName; label: string }> = {
+    Home:      { icon: 'home-outline',               iconFocused: 'home',               label: t.home },
+    Donate:    { icon: 'heart-outline',              iconFocused: 'heart',              label: t.donate },
+    Volunteer: { icon: 'people-outline',             iconFocused: 'people',             label: t.volunteer },
+    Services:  { icon: 'apps-outline',               iconFocused: 'apps',               label: t.services },
+    About:     { icon: 'information-circle-outline', iconFocused: 'information-circle', label: t.about },
+  }
+
   return (
     <NavigationContainer>
       <Tab.Navigator
@@ -59,7 +82,7 @@ export default function RootNavigator() {
         <Tab.Screen name="Home"      component={HomeScreen} />
         <Tab.Screen name="Donate"    component={DonateScreen} />
         <Tab.Screen name="Volunteer" component={VolunteerScreen} />
-        <Tab.Screen name="Apply"     component={ApplyScreen} />
+        <Tab.Screen name="Services"  component={ServicesNavigator} />
         <Tab.Screen name="About"     component={AboutScreen} />
       </Tab.Navigator>
     </NavigationContainer>
